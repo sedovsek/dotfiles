@@ -169,8 +169,8 @@ alias server="open http://$(ipconfig getifaddr en0):8000 && python -m SimpleHTTP
 alias phpserver="open http://$(ipconfig getifaddr en0):8080 && php -S $(ipconfig getifaddr en0):8080"
 
 # vm machies
-alias vmstart=vboxmanage startvm debian
-alias vmstop=vboxmanage controlvm debian savestate
+alias vmstart="vboxmanage startvm debian"
+alias vmstop="vboxmanage controlvm debian savestate"
 
 # zshrc reload
 alias reload!='. ~/.zshrc'
