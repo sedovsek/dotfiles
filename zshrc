@@ -167,6 +167,7 @@ alias ubuntu="ssh -l robert 192.168.1.178"
 # server
 alias server="open http://$(ipconfig getifaddr en0):8000 && python -m SimpleHTTPServer"
 alias phpserver="open http://$(ipconfig getifaddr en0):8080 && php -S $(ipconfig getifaddr en0):8080"
+alias rubyserver="open http://$(ipconfig getifaddr en0):5000 && ruby -run -e httpd . -p5000"
 
 # vm machies
 alias vmstart="vboxmanage startvm debian --type headless"
