@@ -158,11 +158,6 @@ alias ll='ls -alh'
 alias lp='ls -p'
 alias lsd='ls -l ${colorflag} | grep "^d"' # List only directories
 
-# functions
-function tree {
-    find ${1:-.} -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
-}
-
 # OS X only
     # Get OS X Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
     alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm update npm -g; npm update -g; sudo gem update'
@@ -195,6 +190,31 @@ alias rubyserver="open http://$(ipconfig getifaddr en0):5000 && ruby -run -e htt
 alias vmstart="vboxmanage startvm debian --type headless"
 alias vmstop="vboxmanage controlvm debian savestate"
 
+# productivity
+function removeEmptyLinesAtEnd () { sudo sed -i "" -e :a -e "/^\n*$/{$d;N;};/\n$/ba" $1 }
+function disablefb {
+    removeEmptyLinesAtEnd /etc/hosts
+
+    if grep -q "productivity boost" /etc/hosts ;
+      then return ;
+    else
+      echo -e "\n# productivity boost" | sudo tee -a /etc/hosts
+      echo -e "127.0.0.1 facebook.com" | sudo tee -a /etc/hosts
+      echo -e "127.0.0.1 www.facebook.com" | sudo tee -a /etc/hosts
+    fi
+}
+
+function enablefb {
+    sudo sed -i "" "/# productivity boost/d" /etc/hosts
+    sudo sed -i "" "/127.0.0.1 www.facebook.com/d" /etc/hosts
+    sudo sed -i "" "/127.0.0.1 facebook.com/d" /etc/hosts
+    removeEmptyLinesAtEnd /etc/hosts
+}
+
+# mysql
+alias mysqlstart="mysql.server start"
+alias mysqlstop="mysql.server stop"
+
 # zshrc reload
 alias reload!='. ~/.zshrc'
 
@@ -210,3 +230,6 @@ PATH=$PATH:$HOME/.rvm/bin
 
 # Load RVM into a shell session *as a function*
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+# Autojump
+[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
