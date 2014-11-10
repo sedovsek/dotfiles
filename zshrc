@@ -212,8 +212,8 @@ function enablefb {
 }
 
 # mysql
-alias mysqlstart="mysql.server start"
-alias mysqlstop="mysql.server stop"
+alias mysqlstart="sudo mysql.server start"
+alias mysqlstop="sudo mysql.server stop"
 
 # zshrc reload
 alias reload!='. ~/.zshrc'
