@@ -192,27 +192,35 @@ alias vmstop="vboxmanage controlvm debian savestate"
 
 # productivity
 function removeEmptyLinesAtEnd () { sudo sed -i "" -e :a -e "/^\n*$/{$d;N;};/\n$/ba" $1 }
-function disablefb {
+blacklist=(facebook.com 24ur.com nepremicnine.com twitter.com pinterest.com)
+function productivityOn {
     removeEmptyLinesAtEnd /etc/hosts
 
     if grep -q "productivity boost" /etc/hosts ;
       then return ;
     else
       echo -e "\n# productivity boost" | sudo tee -a /etc/hosts
-      echo -e "127.0.0.1 facebook.com" | sudo tee -a /etc/hosts
-      echo -e "127.0.0.1 www.facebook.com" | sudo tee -a /etc/hosts
+
+      for url in "${blacklist[@]}"; do
+        echo -e "127.0.0.1 "$url"" | sudo tee -a /etc/hosts
+        echo -e "127.0.0.1 www."$url"" | sudo tee -a /etc/hosts
+      done
     fi
 }
 
-function enablefb {
+function productivityOff {
     sudo sed -i "" "/# productivity boost/d" /etc/hosts
-    sudo sed -i "" "/127.0.0.1 www.facebook.com/d" /etc/hosts
-    sudo sed -i "" "/127.0.0.1 facebook.com/d" /etc/hosts
+
+    for url in "${blacklist[@]}"; do
+      sudo sed -i "" "/127.0.0.1 "$url"/d" /etc/hosts
+      sudo sed -i "" "/127.0.0.1 www."$url"/d" /etc/hosts
+    done
+    
     removeEmptyLinesAtEnd /etc/hosts
 }
 
 # mysql
-alias mysqlstart="sudo mysql.server start"
+alias mysqlstart="sudo mysql.server start --skip-grant-tables"
 alias mysqlstop="sudo mysql.server stop"
 
 # zshrc reload
