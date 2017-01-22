@@ -1,3 +1,27 @@
+# Tutrl
+SSH_ENV="$HOME/.ssh/environment"
+
+function start_agent {
+   echo "Initialising new SSH agent..."
+   /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+   echo succeeded
+   chmod 600 "${SSH_ENV}"
+   . "${SSH_ENV}" > /dev/null
+   /usr/bin/ssh-add;
+}
+
+# Source SSH settings, if applicable
+
+if [ -f "${SSH_ENV}" ]; then
+   . "${SSH_ENV}" > /dev/null
+   ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+       start_agent;
+   }
+else
+   start_agent;
+fi
+# end of Turtl
+
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
@@ -25,7 +49,7 @@ COMPLETION_WAITING_DOTS="false"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git osx sublime autojump)
+plugins=(git osx autojump)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -149,6 +173,42 @@ function clone {
     git clone $url $repo && cd $repo && subl .;
 }
 
+# grunt-cli
+# http://gruntjs.com/
+#
+# Copyright (c) 2012 Tyler Kellen, contributors
+# Licensed under the MIT license.
+# https://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
+
+# Usage:
+#
+# To enable zsh <tab> completion for grunt, add the following line (minus the
+# leading #, which is the zsh comment character) to your ~/.zshrc file:
+#
+# eval "$(grunt --completion=zsh)"
+
+# Enable zsh autocompletion.
+function _grunt_completion() {
+  local completions
+  # The currently-being-completed word.
+  local cur="${words[@]}"
+  # The current grunt version, available tasks, options, etc.
+  local gruntinfo="$(grunt --version --verbose 2>/dev/null)"
+  # Options and tasks.
+  local opts="$(echo "$gruntinfo" | awk '/Available options: / {$1=$2=""; print $0}')"
+  local compls="$(echo "$gruntinfo" | awk '/Available tasks: / {$1=$2=""; print $0}')"
+  # Only add -- or - options if the user has started typing -
+  [[ "$cur" == -* ]] && compls="$compls $opts"
+  # Trim whitespace.
+  compls=$(echo "$compls" | sed -e 's/^ *//g' -e 's/ *$//g')
+  # Turn compls into an array to of completions.
+  completions=(${=compls})
+  # Tell complete what stuff to show.
+  compadd -- $completions
+}
+
+compdef _grunt_completion grunt
+
 # aliases
 alias db="cd ~/Dropbox"
 alias robert="cd /Users/robert"
@@ -157,6 +217,8 @@ alias l='ls -lh'
 alias ll='ls -alh'
 alias lp='ls -p'
 alias lsd='ls -l ${colorflag} | grep "^d"' # List only directories
+alias myIp='print $(ipconfig getifaddr en0)'
+alias turtldev='open http://development.$(ipconfig getifaddr en0).xip.io'
 
 # OS X only
     # Get OS X Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
@@ -167,7 +229,7 @@ alias lsd='ls -l ${colorflag} | grep "^d"' # List only directories
 
     # Empty the Trash on all mounted volumes and the main HDD
     # Also, clear Apple’s System Logs to improve shell startup speed
-    alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl"
+    alias emptytrash="sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl"
 
     # Show/hide hidden files in Finder
     alias show="defaults write com.apple.Finder AppleShowAllFiles -bool true && killall Finder"
@@ -225,10 +287,6 @@ alias mysqlstop="sudo mysql.server stop"
 
 # zshrc reload
 alias reload!='. ~/.zshrc'
-
-# nvm environment
-source ~/.nvm/nvm.sh
-. ~/.nvm/nvm.sh
 
 # Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
