@@ -10,6 +10,11 @@ function start_agent {
    /usr/bin/ssh-add;
 }
 
+# https://github.com/turtlco/ops/tree/master/ansible#local-setup
+export WORKON_HOME=~/.virtual_envs
+source /usr/local/bin/virtualenvwrapper.sh
+workon opsv2
+
 # Source SSH settings, if applicable
 
 if [ -f "${SSH_ENV}" ]; then
