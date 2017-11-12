@@ -88,54 +88,6 @@ extract () {
   fi
 }
 
-function browsertest() {
-    open -a "/Applications/Google Chrome.app" $1
-    open -a "/Applications/Safari.app/"       $1
-    open -a "/Applications/Firefox.app"       $1
-}
-
-function celtra-dashboard-test {
-    # settings
-    msgUsage="Usage: celtra-dashboard-test [chrome/firefox/ff/safari] [accountIdent] [creatveId] (optional)"
-    msgMissingIdent="Creative ID is missing, skipping some tests..."
-    baseUrl="mab.robert" # http://$accountIdent.$baseUrl
-
-    # checking parameters
-    if [[ -z $1 || -z $2 ]]; then echo $msgUsage
-        return
-    fi
-
-    if [ $1 == "chrome" ]; then
-        app="Google Chrome"
-
-    elif [[ $1 == "firefox" || $1 == "ff" ]]; then
-        app="Firefox"
-
-    elif [ $1 == "safari" ]; then
-        app="Safari"
-    else
-        echo $msgUsage
-        return  
-    fi
-
-    if [ -z $3 ]; then echo $msgMissingIdent
-    fi
-    
-    # open up a browser
-    if [ app ]; then
-        echo "Opening Celtra Dashboard pages with $app"
-
-        for page in "#campaigns" "#demo" "#account" "#billing" "#analytics-settings"
-            open "https://"$2.$baseUrl/$page -a "/Applications/$app.app"
-
-        if [[ -z !$3 ]]
-            for page in "#campaigns/$3" "#analytics/$3" "tags.html#ad=$3"
-                open "https://"$2.$baseUrl/$page -a "/Applications/$app.app"
-    else
-        echo $msgUsage
-    fi
-}
-
 # clones a repository, cds into it, and opens it in my editor.
 # - arg 1 - url|username|repo remote endpoint, username on github, or name of
 #           repository.
@@ -292,9 +244,6 @@ alias mysqlstop="sudo mysql.server stop"
 
 # zshrc reload
 alias reload!='. ~/.zshrc'
-
-# Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
 
 # add RVM to PATH for scripting
 PATH=$PATH:$HOME/.rvm/bin
