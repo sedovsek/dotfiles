@@ -196,18 +196,11 @@ alias turtldev='open http://development.$(ipconfig getifaddr en0).xip.io:5000'
     alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
     alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
-# ssh
-alias debian="ssh -l robert 192.168.1.171"
-alias ubuntu="ssh -l robert 192.168.1.178"
 
 # server
 alias server="open http://$(ipconfig getifaddr en0):8000 && python -m SimpleHTTPServer"
 alias phpserver="open http://$(ipconfig getifaddr en0):8080 && php -S $(ipconfig getifaddr en0):8080"
 alias rubyserver="open http://$(ipconfig getifaddr en0):5000 && ruby -run -e httpd . -p5000"
-
-# vm machies
-alias vmstart="vboxmanage startvm debian --type headless"
-alias vmstop="vboxmanage controlvm debian savestate"
 
 # productivity
 function removeEmptyLinesAtEnd () { sudo sed -i "" -e :a -e "/^\n*$/{$d;N;};/\n$/ba" $1 }
@@ -237,13 +230,6 @@ function productivityOff {
     
     removeEmptyLinesAtEnd /etc/hosts
 }
-
-# mysql
-alias mysqlstart="sudo mysql.server start --skip-grant-tables"
-alias mysqlstop="sudo mysql.server stop"
-
-# zshrc reload
-alias reload!='. ~/.zshrc'
 
 # add RVM to PATH for scripting
 PATH=$PATH:$HOME/.rvm/bin
