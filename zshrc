@@ -175,7 +175,8 @@ alias ll='ls -alh'
 alias lp='ls -p'
 alias lsd='ls -l ${colorflag} | grep "^d"' # List only directories
 alias myIp='print $(ipconfig getifaddr en0)'
-alias turtldev='open http://development.$(ipconfig getifaddr en0).xip.io:5000'
+# alias turtldev='open http://development.$(ipconfig getifaddr en0).xip.io:5000'
+alias turtldev='open http://development.127.0.0.1.turtl.io:5000'
 alias purge='curl -s -X PURGE'
 
 # OS X only
