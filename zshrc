@@ -10,22 +10,16 @@ function start_agent {
    /usr/bin/ssh-add;
 }
 
-# https://github.com/turtlco/ops/tree/master/ansible#local-setup
-export WORKON_HOME=~/.virtual_envs
-source /usr/local/bin/virtualenvwrapper.sh
-workon opsv2
-
 # Source SSH settings, if applicable
-
-if [ -f "${SSH_ENV}" ]; then
-   . "${SSH_ENV}" > /dev/null
-   ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-       start_agent;
-   }
-else
-   start_agent;
-fi
-# end of Turtl
+# if [ -f "${SSH_ENV}" ]; then
+#    . "${SSH_ENV}" > /dev/null
+#    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+#        start_agent;
+#    }
+# else
+#    start_agent;
+# fi
+# # end of Turtl
 
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
@@ -34,10 +28,10 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="sedovsek"
+ZSH_THEME="robbyrussell"
 
 # Set to this to use case-sensitive completion
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="false"
 
 # Comment this out to disable weekly auto-update checks
 DISABLE_AUTO_UPDATE="false"
@@ -54,16 +48,16 @@ COMPLETION_WAITING_DOTS="false"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git osx autojump)
+plugins=(git macos autojump)
 
 source $ZSH/oh-my-zsh.sh
 
 # sublime as default editor
-export EDITOR='subl -w'
+export EDITOR='code -w'
 
 # functions
 function tree {
-    find ${1:-.} -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
+  find ${1:-.} -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
 }
 
 # Extract
